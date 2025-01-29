@@ -1,0 +1,72 @@
+/* Estilo geral */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px; /* Aumenta a largura máxima para comportar mais cards */
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+/* Estilo para o filtro */
+.filters {
+    margin-bottom: 20px;
+    text-align: center; /* Centraliza o filtro */
+}
+
+label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+select {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Exibição horizontal dos cards */
+.project-list {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebra de linha */
+    gap: 15px; /* Espaçamento entre os cards */
+    justify-content: center; /* Alinha os cards horizontalmente */
+}
+
+.project-card {
+    padding: 15px;
+    width: 250px; /* Define uma largura padrão para os cards */
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Centraliza o texto dentro do card */
+}
+
+.project-card h3 {
+    margin: 0;
+    color: #007bff;
+    font-size: 18px;
+}
+
+.project-card p {
+    margin: 10px 0 5px;
+    color: #555;
+    font-size: 14px;
+}
+

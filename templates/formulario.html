@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Projetos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; padding: 20px; }
+        .sidebar { width: 250px; padding: 20px; background-color: #f4f4f4; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); }
+        .content { flex-grow: 1; margin-left: 20px; width: 100%; }
+        .form-container { margin-bottom: 20px; }
+        .project-cards { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+        .card { background-color: #fff; border-radius: 8px; padding: 20px; width: 100%; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Filtros</h3>
+        <form method="get" action="/">
+            <label for="status">Filtrar por Status:</label>
+            <select name="status" onchange="this.form.submit()">
+                <option value="todos">Todos</option>
+                <option value="Endereçado via Linna">Endereçado via Linna</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="content">
+        <h1>Gestão de Projetos</h1>
+        
+        <div class="form-container">
+            <form action="/add_project" method="post">
+                <input type="text" name="nome_do_projeto" placeholder="Nome do Projeto" required>
+                <input type="text" name="status" placeholder="Status">
+                <input type="text" name="líder_do_projeto" placeholder="Líder">
+                <button type="submit">Adicionar Projeto</button>
+            </form>
+        </div>
+
+        <div class="project-cards">
+            {% for project in data %}
+                <div class="card">
+                    <h4>{{ project['nome_do_projeto'] }}</h4>
+                    <p><strong>Status:</strong> {{ project['status'] }}</p>
+                    <form action="/update_project" method="post">
+                        <input type="hidden" name="nome_do_projeto" value="{{ project['nome_do_projeto'] }}">
+                        <input type="text" name="status" value="{{ project['status'] }}">
+                        <button type="submit">Atualizar</button>
+                    </form>
+                    <form action="/delete_project" method="post">
+                        <input type="hidden" name="nome_do_projeto" value="{{ project['nome_do_projeto'] }}">
+                        <button type="submit">Deletar</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

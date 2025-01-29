@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linna Gestão de Projetos</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .content {
+            flex-grow: 1;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+        .project-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: flex-start;
+            flex-grow: 1;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .card h4 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .card p {
+            margin-bottom: 10px;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .filter-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .info-line {
+            display: block;
+            padding: 5px 0;
+        }
+        .info-line p {
+            margin: 0;
+        }
+
+        /* Estilos para o ícone do IALINNA */
+        .agent-icon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .agent-icon:hover {
+            background-color: #d1d1d1;
+        }
+
+        .agent-icon i {
+            font-size: 24px;
+            color: #007bff;
+        }
+
+        .agent-icon p {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 0;
+        }
+
+        /* Estilos para a seção de gerenciamento de equipes */
+        .team-section {
+            margin-top: 40px;
+        }
+
+        .team-section h2 {
+            font-size: 1.75rem;
+            color: #333;
+        }
+
+        .team-icon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .team-icon:hover {
+            background-color: #d1d1d1;
+        }
+
+        .team-icon i {
+            font-size: 24px;
+            color: #28a745;
+        }
+
+        .team-icon p {
+            font-size: 16px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Filtros de Projetos</h3>
+        <div class="filter-container">
+            <div class="filter-label">Filtrar por Nome do Projeto:</div>
+            <form method="get" action="/">
+                <select name="nome_do_projeto" id="nome_do_projeto" onchange="this.form.submit()">
+                    <option value="">Selecione um Projeto</option>
+                    {% for nome_projeto in nome_projetos %}
+                        <option value="{{ nome_projeto }}" {% if filters.nome_do_projeto == nome_projeto %} selected {% endif %}>{{ nome_projeto }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        <div class="filter-container">
+            <div class="filter-label">Filtrar por Status:</div>
+            <form method="get" action="/">
+                <select name="status" id="status" onchange="this.form.submit()">
+                    <option value="todos" {% if filters.status == 'todos' %} selected {% endif %}>Todos</option>
+                    {% for status in status_opcoes %}
+                        <option value="{{ status }}" {% if filters.status == status %} selected {% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        <!-- Ícone do IALINNA -->
+        <div class="agent-icon" onclick="openChat()">
+            <i class="fas fa-robot"></i>
+            <p>IALINNA</p>
+        </div>
+
+        <!-- Ícone de Equipe -->
+        <div class="team-icon" onclick="createTeam()">
+            <i class="fas fa-users"></i>
+            <p>Criar Equipe</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1>Linna Detalhes dos Projetos</h1>
+
+        <div class="project-cards">
+            {% for project in data %}
+                <div class="card">
+                    <h4>{{ project['nome_do_projeto'] }}</h4>
+
+                    {% for key, value in project.items() %}
+                    <div class="info-line">
+                        <p><strong>{{ key.replace("_", " ").capitalize() }}:</strong> {{ value if value else 'Não informado' }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <h1> Linna Gestão dos Projetos</h1>
+
+        <div class="project-cards">
+            {% for project in data %}
+                <div class="card">
+                    <h4>{{ project['nome_do_projeto'] }}</h4>
+
+                    <div class="info-line">
+                        <p><strong>Status:</strong> {{ project['status'] if project['status'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Líder:</strong> {{ project['líder_do_projeto'] if project['líder_do_projeto'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Categoria:</strong> {{ project['categoria'] if project['categoria'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Origem do Projeto:</strong> {{ project['origem_do_projeto'] if project['origem_do_projeto'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Etapa Atual:</strong> {{ project['etapa_atual'] if project['etapa_atual'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Descrição do Desafio:</strong> {{ project['descrição_do_desafio'] if project['descrição_do_desafio'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Link dos Doc:</strong> <a href="{{ project['link_dos_doc'] }}" target="_blank">Acessar</a></p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Startup Envolvida:</strong> {{ project['startup_envolvida'] if project['startup_envolvida'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Cronograma:</strong> {{ project['cronograma'] if project['cronograma'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Dificuldades:</strong> {{ project['dificuldades'] if project['dificuldades'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Próximos Passos:</strong> {{ project['próximos_passos'] if project['próximos_passos'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Ponto Focal:</strong> {{ project['ponto_focal'] if project['ponto_focal'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Progresso:</strong> {{ project['progresso'] if project['progresso'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Representante da Startup:</strong> {{ project['representante_startup'] if project['representante_startup'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Demandas Pendentes:</strong> {{ project['demandas_pendentes'] if project['demandas_pendentes'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Acesso:</strong> {{ project['acesso'] if project['acesso'] else 'Não informado' }}</p>
+                    </div>
+                    <div class="info-line">
+                        <p><strong>Responsáveis:</strong> {{ project['responsáveis'] if project['responsáveis'] else 'Não informado' }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function openChat() {
+            alert("Abrindo o chat com IALINNA...");
+        }
+
+        function createTeam() {
+            alert("Criando uma nova equipe...");
+        }
+    </script>
+</body>
+</html>
+

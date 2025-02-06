@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Equipe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .user-icon {
+            font-size: 30px;
+            margin-right: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Criar Equipe</h1>
+        <form action="/criar_equipe" method="POST">
+            <!-- Informações sobre a equipe -->
+            <div class="form-group">
+                <label for="nome">Nome da Equipe:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="visibilidade">Visibilidade:</label>
+                <select id="visibilidade" name="visibilidade" required>
+                    <option value="true">Visível</option>
+                    <option value="false">Oculto</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="membros">Membros (separados por vírgula):</label>
+                <input type="text" id="membros" name="membros" placeholder="Exemplo: João, Maria, Pedro" required>
+            </div>
+
+            <div class="form-group">
+                <label for="aprovacao_necessaria">Aprovação Necessária:</label>
+                <select id="aprovacao_necessaria" name="aprovacao_necessaria" required>
+                    <option value="true">Sim</option>
+                    <option value="false">Não</option>
+                </select>
+            </div>
+
+            <!-- Papéis dos membros -->
+            <div class="form-group">
+                <label for="papel">Papel do Membro:</label>
+                <div>
+                    <label for="colaborador">
+                        <i class="fas fa-user user-icon"></i> Colaborador
+                        <input type="radio" id="colaborador" name="papel" value="colaborador" required>
+                    </label><br>
+
+                    <label for="administrador">
+                        <i class="fas fa-user-shield user-icon"></i> Administrador
+                        <input type="radio" id="administrador" name="papel" value="administrador" required>
+                    </label><br>
+
+                    <label for="visitante">
+                        <i class="fas fa-user-circle user-icon"></i> Visitante
+                        <input type="radio" id="visitante" name="papel" value="visitante" required>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit">Criar Equipe</button>
+        </form>
+
+        <hr>
+        <p class="back-link"><a href="/">Voltar para a página inicial</a></p>
+    </div>
+
+</body>
+</html>

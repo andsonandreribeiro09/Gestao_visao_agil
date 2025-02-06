@@ -3,57 +3,510 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Projetos</title>
+    <title>Gestão Projeto Visão Ágil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        function toggleFormulario() {
+            document.getElementById("formProjeto").classList.toggle("show");
+        }
+    </script>
+
     <style>
-        body { font-family: Arial, sans-serif; display: flex; padding: 20px; }
-        .sidebar { width: 250px; padding: 20px; background-color: #f4f4f4; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); }
-        .content { flex-grow: 1; margin-left: 20px; width: 100%; }
-        .form-container { margin-bottom: 20px; }
-        .project-cards { display: flex; flex-direction: column; gap: 20px; width: 100%; }
-        .card { background-color: #fff; border-radius: 8px; padding: 20px; width: 100%; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Layout principal */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Sidebar fixa */
+        .sidebar {
+            width: 250px;
+            height: 100vh; /* Ocupa toda a altura da tela */
+            position: fixed; /* Fixa a barra lateral */
+            top: 0;
+            left: 0;
+            padding: 20px;
+            background-color: #807a7a;
+            border-right: 1px solid #ddd; /* Separação visual */
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Alinha os itens no topo */
+        }
+
+        /* Ajusta o conteúdo para não ficar atrás da sidebar */
+        .content {
+            margin-left: 270px; /* Considera a largura da sidebar + espaçamento */
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+
+        .logo {
+            width: 50%;
+            max-width: 100px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: 0; /* Alinhamento à esquerda */
+            margin-right: auto;
+        }
+
+
+
+        /* Filtros */
+        .filter-container {
+            margin-bottom: 20px;
+        }
+
+        .sidebar select {
+            width: 100%; /* Faz o seletor ocupar toda a largura disponível */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        /* Ícones da sidebar */
+        .agent-icon, .team-icon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .agent-icon:hover, .team-icon:hover {
+            background-color: #d1d1d1;
+        }
+
+        /* Área de conteúdo */
+        .content {
+            flex-grow: 1;
+            max-width: calc(100% - 270px);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Formulário */
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .form-container input, .form-container select {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-container button {
+            padding: 12px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Grid de Projetos */
+        .project-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card h4 {
+            margin-bottom: 10px;
+        }
+        .card p {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        /* Botões de ação */
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        .actions a, .actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .update-btn {
+            background: #28a745;
+            color: #fff;
+            text-decoration: none;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: #fff;
+        }
+        .update-btn:hover, .delete-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+            .content {
+                max-width: 100%;
+            }
+        }
+
+        .icon-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .icon-bar div, .icon-bar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            padding: 1px 7px; /* Reduzindo o padding interno */
+            width: 100%; /* Garante que as caixas ocupem toda a largura disponível */
+        }
+        .icon-bar div:hover, .icon-bar a:hover {
+            background-color: #d1d1d1;
+        }
+
+        /* Estilo do seletor de filtro */
+        .sidebar form {
+            width: 100%; 
+            margin-bottom: 20px; /* Adiciona espaçamento abaixo */
+        }
+
+        /* Ajuste para os ícones não ficarem sobrepostos */
+        .icon-bar {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Maior espaçamento entre os ícones */
+        }
+
+        /* Garantir que os ícones não fiquem sobrepostos */
+        .icon-bar div, .icon-bar a {
+            width: 100%;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            text-decoration: none;
+            color: inherit;
+            transition: background-color 0.3s ease;
+            justify-content: center; /* Centraliza ícones e texto */
+        }
+
+        .icon-bar div:hover, .icon-bar a:hover {
+            background-color: #d1d1d1;
+        }
+
+
+        
+
+        .sector-startup-section {
+            margin-top: 10px;
+            padding: 5px;
+            background: #f8f9fa; /* Fundo suave */
+            border-radius: 5px;
+        }
+
+        .sector-startup-section h3 {
+            font-size: 16px;
+            color: #01050a; /* Azul destaque */
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .sector-startup-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sector-startup-section li {
+            font-size: 14px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sector-startup-section li i {
+            margin-right: 8px;
+            color: #007BFF; /* Ícones azuis */
+        }
+
+        .form-container {
+            display: none; /* Oculta o formulário inicialmente */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            max-width: 400px;
+        }
+
+        .show {
+            display: block; /* Exibe quando a classe "show" é adicionada */
+        }
+
+        .add-button {
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            background-color: blue;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .add-button i {
+            font-size: 18px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: rgb(224, 61, 61);
+        }
+
+        .sector-startup-section {
+        cursor: pointer; /* Muda o cursor para indicar que é clicável */
+        transition: background-color 0.3s;
+        }
+
+        .sector-startup-section:hover {
+            background-color: #f0f0f0; /* Efeito ao passar o mouse */
+        }
+
+
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <h3>Filtros</h3>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo" />
+        <h3>Gestão Visão Ágil</h3>
         <form method="get" action="/">
             <label for="status">Filtrar por Status:</label>
-            <select name="status" onchange="this.form.submit()">
-                <option value="todos">Todos</option>
-                <option value="Endereçado via Linna">Endereçado via Linna</option>
+            <select name="status" id="status" onchange="this.form.submit()">
+                <option value="">Selecionar</option> 
+                {% for status in status_opcoes %}
+                    <option value="{{ status }}">{{ status }}</option>
+                {% endfor %}
             </select>
         </form>
-    </div>
+                
+        <div class="icon-bar">
+            <a href="/dashboard/" target="_blank">
+                <i class="fas fa-chart-line"></i>
+                <p>Dashboard</p>
+            </a>
 
-    <div class="content">
-        <h1>Gestão de Projetos</h1>
-        
-        <div class="form-container">
-            <form action="/add_project" method="post">
-                <input type="text" name="nome_do_projeto" placeholder="Nome do Projeto" required>
-                <input type="text" name="status" placeholder="Status">
-                <input type="text" name="líder_do_projeto" placeholder="Líder">
-                <button type="submit">Adicionar Projeto</button>
-            </form>
+            <div onclick="createTeam()">
+                <i class="fas fa-users"></i>
+                <p>Equipe</p>
+            </div>
+
+            <script>
+                function createTeam() {
+                    window.location.href = "/criar_equipe"; 
+                }
+            </script>            
+
+            <div onclick="openSchedule()">
+                <i class="fas fa-calendar-alt"></i>
+                <p>Cronograma</p>
+            </div>
+            
+            <div onclick="setGoals()">
+                <i class="fas fa-bullseye"></i>
+                <p>Meta</p>
+            </div>
+            
+            <div onclick="openReport()">
+                <i class="fas fa-file-alt"></i>
+                <p>Relatório</p>
+            </div>        
+
+            <div onclick="openChat()">
+                <i class="fas fa-robot"></i>
+                <p>IA Visão Ágil</p>
+            </div>
+
+            <div onclick="openDocuments()">
+                <i class="fas fa-folder"></i>
+                <p>Fórum</p>
+            </div>
         </div>
 
+                <!-- Nova Seção de Setores e Startups -->
+        <div class="sector-startup-section" onclick="redirecionar()">
+            <h3>Setores & Startups</h3>
+            <ul>
+                {% for setor in setores %}
+                    <li><i class="fas fa-building"></i> {{ setor }}</li>
+                {% endfor %}
+            </ul>
+            <ul>
+                {% for startup in startups %}
+                    <li><i class="fas fa-rocket"></i> {{ startup }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    https://visao-agil.onrender.com
+    <script>
+        function redirecionar() {
+            window.location.href = "https://visao-agil.onrender.com";
+        }
+    </script>
+
+      
+
+    <h3>Gestão Setor Visão Ágil</h3>
+
+    <!-- Conteúdo principal -->
+    <div class="content">
+        <!-- Mensagens de Flash (sucesso ou erro) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                       <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Lista de Projetos -->
         <div class="project-cards">
             {% for project in data %}
                 <div class="card">
-                    <h4>{{ project['nome_do_projeto'] }}</h4>
+                    <h4>{{ project['startup_envolvida'] }}</h4>
                     <p><strong>Status:</strong> {{ project['status'] }}</p>
-                    <form action="/update_project" method="post">
-                        <input type="hidden" name="nome_do_projeto" value="{{ project['nome_do_projeto'] }}">
-                        <input type="text" name="status" value="{{ project['status'] }}">
-                        <button type="submit">Atualizar</button>
-                    </form>
-                    <form action="/delete_project" method="post">
-                        <input type="hidden" name="nome_do_projeto" value="{{ project['nome_do_projeto'] }}">
-                        <button type="submit">Deletar</button>
-                    </form>
+                    <p><strong>Nome Projeto:</strong> {{ project['nome_projeto'] }}</p>
+                    <p><strong>Categoria:</strong> {{ project['categoria'] }}</p>
+                    <p><strong>Origem Projeto:</strong> {{ project['origem_projeto'] }}</p>
+                    <p><strong>Valor do Piloto:</strong> {{ project['valor_piloto'] }}</p>
+                    <p><strong>Descrição:</strong> {{ project['descricao_desafio'] }}</p>
+                    <div class="actions">
+                        <a href="/edit_project/{{ project['id'] }}" class="update-btn">
+                            <i class="fas fa-edit"></i> Atualizar
+                        </a>
+                        <form action="/delete_project" method="post">
+                            <input type="hidden" name="id" value="{{ project['id'] }}">
+                            <button type="submit" class="delete-btn"><i class="fas fa-trash"></i> Deletar</button>
+                        </form>
+                    </div>
                 </div>
             {% endfor %}
+        </div>
+
+            <!-- Botão para abrir o formulário -->
+        <button class="add-button" onclick="toggleFormulario()" aria-label="Adicionar Projeto">
+            <i class="fas fa-plus"></i> Adicionar Projeto
+        </button>
+
+        <!-- Formulário de Adicionar Projeto -->
+    <div class="form-container" id="formProjeto">
+        <form action="/add_project" method="post">
+            <input type="text" name="categoria" placeholder="Categoria" required>
+            <input type="text" name="nome_projeto" placeholder="Nome do Projeto" required>
+            <input type="text" name="origem_projeto" placeholder="Origem do Projeto" required>
+            <input type="text" name="etapa_atual" placeholder="Etapa Atual" required>
+            <textarea name="descricao_desafio" placeholder="Descrição do Desafio" required></textarea>
+            <input type="text" name="lider_projeto" placeholder="Líder do Projeto" required>
+            <input type="url" name="link_doc" placeholder="Link do Documento" required>
+            <input type="text" name="startup_envolvida" placeholder="Startup Envolvida" required>
+            <input type="text" name="areas_envolvidas" placeholder="Áreas Envolvidas" required>
+            <input type="text" name="cronograma" placeholder="Cronograma" required>
+            <textarea name="dificuldades" placeholder="Dificuldades" required></textarea>
+            <textarea name="proximos_passos" placeholder="Próximos Passos" required></textarea>
+            <input type="text" name="ponto_focal" placeholder="Ponto Focal" required>
+            <input type="number" name="progresso" placeholder="Progresso (0-10)" min="0" max="10" required>
+            <input type="text" name="representante_startup" placeholder="Representante da Startup" required>
+            <textarea name="demandas_pendentes" placeholder="Demandas Pendentes" required></textarea>
+            <input type="text" name="acesso" placeholder="Acesso" required>
+            <input type="number" name="valor_piloto" placeholder="Valor do Piloto" required>
+            <input type="text" name="resultado_esperado" placeholder="Resultado Esperado" required>
+            <input type="text" name="supriu_necessidade" placeholder="Supriu a Necessidade?" required>
+            <input type="text" name="status" placeholder="Status" required>
+            <button type="submit"><i class="fas fa-paper-plane"></i> Enviar Projeto</button>
+        </form>
         </div>
     </div>
 </body>

@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Necessário para o uso de flash messages
 
 # Conectar ao PostgreSQL usando SQLAlchemy
-DATABASE_URL = "postgresql://linna2025_user:ED4J5Ld3ZetXtGESoMrOR3neDk9D3BJe@dpg-cud55bhopnds73aq1csg-a.oregon-postgres.render.com/linna2025"
+DATABASE_URL = "DATABASE_URL"
 engine = create_engine(DATABASE_URL)
 
 # Conectar ao banco de dados utilizando SQLAlchemy
